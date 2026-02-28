@@ -1,0 +1,505 @@
+/* ══════════════════════════════════════════════════
+   BYOB — Be Your Own Band  |  style.css
+   ══════════════════════════════════════════════════ */
+
+/* ── Variables ── */
+:root {
+  --bg:           #111010;
+  --surface:      #1c1a18;
+  --surface2:     #252220;
+  --surface3:     #2e2b27;
+  --border:       #3a3530;
+  --amber:        #f5a623;
+  --amber-dim:    #7a5212;
+  --amber-glow:   rgba(245, 166, 35, 0.15);
+  --cream:        #e8dcc8;
+  --cream-dim:    #7a7060;
+  --red:          #e85544;
+  --green:        #5dd67a;
+  --blue:         #5b9cf5;
+  --purple:       #a875f5;
+  --text:         #c8bfb0;
+  --text-dim:     #5a5248;
+  --drums-color:  #e85544;
+  --keys-color:   #5b9cf5;
+  --guitar-color: #5dd67a;
+  --bass-color:   #a875f5;
+}
+
+/* ── Reset ── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── Base ── */
+body {
+  background: var(--bg);
+  font-family: 'DM Mono', monospace;
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.012'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* ── Header ── */
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px 12px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.logo {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+}
+
+.logo-main {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2.4rem;
+  color: var(--amber);
+  letter-spacing: 0.12em;
+  text-shadow: 0 0 20px rgba(245, 166, 35, 0.4);
+}
+
+.logo-sub {
+  font-size: 0.55rem;
+  letter-spacing: 0.5em;
+  color: var(--cream-dim);
+  text-transform: uppercase;
+  margin-top: -2px;
+}
+
+/* ── Transport ── */
+.transport {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  background: var(--surface3);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  padding: 8px 16px;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all 0.15s;
+  text-transform: uppercase;
+}
+
+.btn:hover { border-color: var(--amber); color: var(--amber); }
+
+.btn-play {
+  background: var(--amber);
+  color: #111;
+  border-color: var(--amber);
+  font-weight: 500;
+  padding: 8px 24px;
+  font-size: 0.8rem;
+}
+
+.btn-play:hover                { background: #ffbb44; color: #111; border-color: #ffbb44; }
+.btn-play.playing              { background: var(--red); border-color: var(--red); color: #fff; }
+.btn-play.playing:hover        { background: #ff6655; border-color: #ff6655; }
+
+/* BPM */
+.bpm-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 4px 10px;
+}
+
+.bpm-label {
+  font-size: 0.55rem;
+  letter-spacing: 0.3em;
+  color: var(--text-dim);
+}
+
+.bpm-input {
+  background: none;
+  border: none;
+  color: var(--amber);
+  font-family: 'Bebas Neue', monospace;
+  font-size: 1.5rem;
+  width: 52px;
+  text-align: center;
+  outline: none;
+  letter-spacing: 0.05em;
+}
+
+.bpm-btns { display: flex; flex-direction: column; gap: 1px; }
+
+.bpm-btn {
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-size: 0.6rem;
+  cursor: pointer;
+  padding: 1px 4px;
+  line-height: 1;
+  transition: color 0.1s;
+}
+
+.bpm-btn:hover { color: var(--amber); }
+
+/* Steps */
+.steps-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.65rem;
+  color: var(--text-dim);
+}
+
+.steps-select {
+  background: var(--surface3);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  padding: 4px 8px;
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+}
+
+/* Swing knob */
+.swing-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.6rem;
+  color: var(--text-dim);
+}
+
+.knob-mini {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #2e2b27, #111010);
+  border: 1px solid var(--border);
+  cursor: ns-resize;
+  position: relative;
+  transition: border-color 0.2s;
+}
+
+.knob-mini:hover { border-color: var(--amber); }
+
+.knob-mini::after {
+  content: '';
+  position: absolute;
+  width: 2px;
+  height: 9px;
+  background: var(--amber);
+  top: 3px;
+  left: 50%;
+  transform-origin: bottom center;
+  transform: translateX(-50%) rotate(var(--k-rot, 0deg));
+  border-radius: 1px;
+}
+
+/* Master volume */
+.master-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.6rem;
+  color: var(--text-dim);
+}
+
+.master-wrap input[type="range"] {
+  width: 70px;
+  accent-color: var(--amber);
+}
+
+/* ── Main layout ── */
+main {
+  padding: 16px 20px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* ── Playhead bar ── */
+.playhead-bar {
+  height: 3px;
+  background: var(--surface2);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 4px;
+}
+
+.playhead-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--amber), #ffcc44);
+  width: 0%;
+  transition: width 0.05s linear;
+  box-shadow: 0 0 8px var(--amber);
+}
+
+/* ── Instrument panel ── */
+.instrument-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+
+.inst-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  background: var(--surface2);
+  border-bottom: 1px solid var(--border);
+  user-select: none;
+  flex-wrap: wrap;
+}
+
+.inst-color-bar {
+  width: 4px;
+  height: 32px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.inst-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.4rem;
+  letter-spacing: 0.15em;
+  flex: 1;
+  min-width: 80px;
+}
+
+.inst-variant-btns {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.variant-btn {
+  background: var(--surface3);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  padding: 4px 10px;
+  cursor: pointer;
+  border-radius: 2px;
+  letter-spacing: 0.1em;
+  transition: all 0.15s;
+  text-transform: uppercase;
+}
+
+.variant-btn.active { border-color: currentColor; }
+
+.inst-vol {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.6rem;
+  color: var(--text-dim);
+}
+
+.inst-vol input[type="range"] {
+  width: 70px;
+  accent-color: var(--amber);
+}
+
+.inst-mute {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  padding: 4px 8px;
+  cursor: pointer;
+  border-radius: 2px;
+  letter-spacing: 0.1em;
+  transition: all 0.15s;
+}
+
+.inst-mute.muted {
+  background: rgba(232, 85, 68, 0.15);
+  border-color: var(--red);
+  color: var(--red);
+}
+
+.collapse-btn {
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-size: 0.8rem;
+  cursor: pointer;
+  padding: 0 4px;
+  transition: transform 0.2s;
+}
+
+.instrument-panel.collapsed .collapse-btn  { transform: rotate(-90deg); }
+.instrument-panel.collapsed .seq-body      { display: none; }
+
+/* ── Sequencer grid ── */
+.seq-body {
+  padding: 10px 16px 14px;
+}
+
+/* Beat numbers */
+.beat-numbers {
+  display: flex;
+  gap: 3px;
+  margin-bottom: 3px;
+  padding-left: 72px;
+}
+
+.beat-num {
+  flex: 1;
+  font-size: 0.45rem;
+  color: var(--text-dim);
+  text-align: center;
+  min-width: 18px;
+}
+
+.beat-num.quarter    { color: var(--amber-dim); }
+.beat-num.group-start:not(:first-child) { margin-left: 6px; }
+
+/* LED row */
+.led-row {
+  display: flex;
+  gap: 3px;
+  padding-left: 72px;
+  margin-bottom: 6px;
+}
+
+.led-dot {
+  flex: 1;
+  height: 3px;
+  background: var(--surface3);
+  border-radius: 1px;
+  min-width: 18px;
+  transition: background 0.05s;
+}
+
+.led-dot.lit { background: var(--amber); box-shadow: 0 0 4px var(--amber); }
+.led-dot.group-start:not(:first-child) { margin-left: 6px; }
+
+/* Step rows */
+.seq-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.seq-row:last-child { margin-bottom: 0; }
+
+.row-label {
+  font-size: 0.62rem;
+  color: var(--text-dim);
+  letter-spacing: 0.08em;
+  width: 64px;
+  flex-shrink: 0;
+  text-align: right;
+  text-transform: uppercase;
+}
+
+.step-grid {
+  display: flex;
+  gap: 3px;
+  flex: 1;
+}
+
+/* Steps */
+.step {
+  flex: 1;
+  height: 32px;
+  background: var(--surface3);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  cursor: pointer;
+  position: relative;
+  transition: filter 0.05s, transform 0.05s, border-color 0.08s;
+  min-width: 18px;
+}
+
+.step:hover        { border-color: var(--cream-dim); }
+.step.on           { border-color: transparent; box-shadow: inset 0 1px 0 rgba(255,255,255,0.15); }
+.step.playing      { filter: brightness(1.6); transform: scaleY(1.05); }
+
+.step.group-start:not(:first-child) { margin-left: 6px; }
+
+/* ── Visualizer section ── */
+.viz-section {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.viz-wrap {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 10px 14px 8px;
+  height: 90px;
+  position: relative;
+  overflow: hidden;
+}
+
+.viz-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  color: var(--amber-dim);
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: calc(100% - 20px);
+}
+
+/* ── Footer ── */
+footer {
+  text-align: center;
+  padding: 20px;
+  font-size: 0.55rem;
+  letter-spacing: 0.3em;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar        { width: 6px; height: 6px; }
+::-webkit-scrollbar-track  { background: var(--bg); }
+::-webkit-scrollbar-thumb  { background: var(--border); border-radius: 3px; }
+
+/* ── Responsive ── */
+@media (max-width: 700px) {
+  .step       { min-width: 14px; height: 26px; }
+  .row-label  { width: 48px; font-size: 0.55rem; }
+  .inst-name  { font-size: 1.1rem; }
+  .logo-main  { font-size: 1.8rem; }
+}

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BYOB — Be Your Own Band</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ── HEADER ── -->
+  <header>
+    <div class="logo">
+      <span class="logo-main">BYOB</span>
+      <span class="logo-sub">Be Your Own Band</span>
+    </div>
+
+    <div class="transport">
+      <button class="btn btn-play" id="playBtn">▶ Play</button>
+      <button class="btn" id="stopBtn">■ Stop</button>
+      <button class="btn" id="clearBtn">✕ Clear</button>
+
+      <div class="bpm-wrap">
+        <span class="bpm-label">BPM</span>
+        <input class="bpm-input" id="bpmInput" type="number" value="120" min="40" max="220">
+        <div class="bpm-btns">
+          <button class="bpm-btn" id="bpmUp">▲</button>
+          <button class="bpm-btn" id="bpmDown">▼</button>
+        </div>
+      </div>
+
+      <div class="steps-wrap">
+        <span>Steps:</span>
+        <select class="steps-select" id="stepsSelect">
+          <option value="16">16</option>
+          <option value="32" selected>32</option>
+        </select>
+      </div>
+
+      <div class="swing-wrap">
+        <span>Swing</span>
+        <div class="knob-mini" id="swingKnob" title="Swing"></div>
+      </div>
+
+      <div class="master-wrap">
+        <span>Vol</span>
+        <input type="range" id="masterVol" min="0" max="1" step="0.01" value="0.8">
+      </div>
+    </div>
+  </header>
+
+  <!-- ── MAIN ── -->
+  <main>
+
+    <div class="playhead-bar">
+      <div class="playhead-fill" id="playheadFill"></div>
+    </div>
+
+    <!-- Drums -->
+    <div class="instrument-panel" id="panel-drums">
+      <div class="inst-header">
+        <div class="inst-color-bar" style="background: var(--drums-color);"></div>
+        <div class="inst-name" style="color: var(--drums-color);">Drums</div>
+        <div class="inst-variant-btns">
+          <button class="variant-btn active" data-inst="drums" data-variant="acoustic" style="color: var(--drums-color);">Acoustic</button>
+          <button class="variant-btn" data-inst="drums" data-variant="electronic" style="color: var(--drums-color);">Electronic</button>
+        </div>
+        <div class="inst-vol">
+          <span>Vol</span>
+          <input type="range" min="0" max="1" step="0.01" value="0.85" data-inst="drums" class="inst-vol-slider">
+        </div>
+        <button class="inst-mute" data-inst="drums">Mute</button>
+        <button class="collapse-btn" data-panel="panel-drums">▾</button>
+      </div>
+      <div class="seq-body" id="seq-drums"></div>
+    </div>
+
+    <!-- Keys -->
+    <div class="instrument-panel" id="panel-keys">
+      <div class="inst-header">
+        <div class="inst-color-bar" style="background: var(--keys-color);"></div>
+        <div class="inst-name" style="color: var(--keys-color);">Keys</div>
+        <div class="inst-variant-btns">
+          <button class="variant-btn active" data-inst="keys" data-variant="piano" style="color: var(--keys-color);">Piano</button>
+          <button class="variant-btn" data-inst="keys" data-variant="synth" style="color: var(--keys-color);">Synth</button>
+          <button class="variant-btn" data-inst="keys" data-variant="organ" style="color: var(--keys-color);">Organ</button>
+        </div>
+        <div class="inst-vol">
+          <span>Vol</span>
+          <input type="range" min="0" max="1" step="0.01" value="0.7" data-inst="keys" class="inst-vol-slider">
+        </div>
+        <button class="inst-mute" data-inst="keys">Mute</button>
+        <button class="collapse-btn" data-panel="panel-keys">▾</button>
+      </div>
+      <div class="seq-body" id="seq-keys"></div>
+    </div>
+
+    <!-- Guitar -->
+    <div class="instrument-panel" id="panel-guitar">
+      <div class="inst-header">
+        <div class="inst-color-bar" style="background: var(--guitar-color);"></div>
+        <div class="inst-name" style="color: var(--guitar-color);">Guitar</div>
+        <div class="inst-variant-btns">
+          <button class="variant-btn active" data-inst="guitar" data-variant="acoustic" style="color: var(--guitar-color);">Acoustic</button>
+          <button class="variant-btn" data-inst="guitar" data-variant="electric" style="color: var(--guitar-color);">Electric</button>
+        </div>
+        <div class="inst-vol">
+          <span>Vol</span>
+          <input type="range" min="0" max="1" step="0.01" value="0.7" data-inst="guitar" class="inst-vol-slider">
+        </div>
+        <button class="inst-mute" data-inst="guitar">Mute</button>
+        <button class="collapse-btn" data-panel="panel-guitar">▾</button>
+      </div>
+      <div class="seq-body" id="seq-guitar"></div>
+    </div>
+
+    <!-- Bass -->
+    <div class="instrument-panel" id="panel-bass">
+      <div class="inst-header">
+        <div class="inst-color-bar" style="background: var(--bass-color);"></div>
+        <div class="inst-name" style="color: var(--bass-color);">Bass</div>
+        <div class="inst-variant-btns">
+          <button class="variant-btn active" data-inst="bass" data-variant="electric" style="color: var(--bass-color);">Electric</button>
+          <button class="variant-btn" data-inst="bass" data-variant="synth" style="color: var(--bass-color);">Synth</button>
+        </div>
+        <div class="inst-vol">
+          <span>Vol</span>
+          <input type="range" min="0" max="1" step="0.01" value="0.8" data-inst="bass" class="inst-vol-slider">
+        </div>
+        <button class="inst-mute" data-inst="bass">Mute</button>
+        <button class="collapse-btn" data-panel="panel-bass">▾</button>
+      </div>
+      <div class="seq-body" id="seq-bass"></div>
+    </div>
+
+    <!-- Visualizers -->
+    <div class="viz-section">
+      <div class="viz-wrap" style="flex:2">
+        <div class="viz-title">Waveform</div>
+        <canvas id="waveCanvas"></canvas>
+      </div>
+      <div class="viz-wrap" style="flex:1">
+        <div class="viz-title">Spectrum</div>
+        <canvas id="specCanvas"></canvas>
+      </div>
+    </div>
+
+  </main>
+
+  <footer>BYOB — Be Your Own Band &nbsp;·&nbsp; Web Audio Engine &nbsp;·&nbsp; All sounds synthesized in-browser</footer>
+
+  <!-- JS modules loaded in dependency order -->
+  <script src="js/state.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/ui.js"></script>
+
+</body>
+</html>
