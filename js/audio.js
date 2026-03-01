@@ -57,11 +57,13 @@ function getInstGain(inst) {
 
 // ── Scheduler ───────────────────────────────────────
 function scheduleStep(step, time) {
+  const secondsPerStep = (60 / bpm) / 4;
   for (const inst of Object.keys(instruments)) {
     if (!grid[inst]) continue;
     for (const [rowId, pattern] of Object.entries(grid[inst])) {
-      if (pattern[step]) {
-        triggerSound(inst, rowId, time, getInstGain(inst));
+      const len = pattern[step]; // 0=off, N=note spans N slots
+      if (len > 0) {
+        triggerSound(inst, rowId, time, getInstGain(inst), len * secondsPerStep);
       }
     }
   }
@@ -120,12 +122,13 @@ function makeDistCurve(amount) {
 }
 
 // ── Dispatch ────────────────────────────────────────
-function triggerSound(inst, rowId, time, vol) {
+function triggerSound(inst, rowId, time, vol, duration) {
   if (!audioCtx || vol === 0) return;
-  if (inst === 'drums')  triggerDrum(rowId, time, vol);
-  if (inst === 'keys')   triggerKeys(rowId, time, vol);
-  if (inst === 'guitar') triggerGuitar(rowId, time, vol);
-  if (inst === 'bass')   triggerBass(rowId, time, vol);
+  const dur = duration || 0.12; // default one-slot
+  if (inst === 'drums')  triggerDrum(rowId, time, vol);           // drums ignore duration
+  if (inst === 'keys')   triggerKeys(rowId, time, vol, dur);
+  if (inst === 'guitar') triggerGuitar(rowId, time, vol, dur);
+  if (inst === 'bass')   triggerBass(rowId, time, vol, dur);
 }
 
 // ── DRUMS ────────────────────────────────────────────
@@ -270,7 +273,7 @@ function triggerDrum(type, time, vol) {
 }
 
 // ── KEYS ─────────────────────────────────────────────
-function triggerKeys(noteId, time, vol) {
+function triggerKeys(noteId, time, vol, duration) {
   const freq    = NOTE_FREQ[noteId] || 261.6;
   const variant = instVariant.keys;
 
@@ -283,7 +286,7 @@ function triggerKeys(noteId, time, vol) {
       osc.connect(g);
       g.gain.linearRampToValueAtTime(amp, time + 0.005);
       g.gain.exponentialRampToValueAtTime(amp * 0.6, time + 0.1);
-      g.gain.exponentialRampToValueAtTime(0.001, time + 1.2);
+      g.gain.exponentialRampToValueAtTime(0.001, time + Math.max(duration || 1.2, 0.1));
       osc.start(time); osc.stop(time + 1.25);
     });
   }
@@ -301,8 +304,8 @@ function triggerKeys(noteId, time, vol) {
     osc.connect(filt); filt.connect(g);
     g.gain.linearRampToValueAtTime(vol, time + 0.01);
     g.gain.exponentialRampToValueAtTime(vol * 0.6, time + 0.1);
-    g.gain.exponentialRampToValueAtTime(0.001, time + 0.8);
-    osc.start(time); osc.stop(time + 0.85);
+    g.gain.exponentialRampToValueAtTime(0.001, time + Math.max(duration || 0.8, 0.1));
+    osc.start(time); osc.stop(time + Math.max(duration || 0.8, 0.1) + 0.05);
   }
 
   else if (variant === 'organ') {
@@ -313,15 +316,15 @@ function triggerKeys(noteId, time, vol) {
       osc.frequency.value = freq * h;
       const g = makeGain(vol * drawbars[i], time);
       osc.connect(g);
-      g.gain.setValueAtTime(vol * drawbars[i], time + 0.4);
-      g.gain.linearRampToValueAtTime(0, time + 0.45);
+      g.gain.setValueAtTime(vol * drawbars[i], time + Math.max(duration || 0.4, 0.05));
+      g.gain.linearRampToValueAtTime(0, time + Math.max(duration || 0.4, 0.05) + 0.05);
       osc.start(time); osc.stop(time + 0.46);
     });
   }
 }
 
 // ── GUITAR ───────────────────────────────────────────
-function triggerGuitar(noteId, time, vol) {
+function triggerGuitar(noteId, time, vol, duration) {
   const freq    = NOTE_FREQ[noteId] || 82.4;
   const variant = instVariant.guitar;
 
@@ -377,7 +380,7 @@ function triggerGuitar(noteId, time, vol) {
 }
 
 // ── BASS ─────────────────────────────────────────────
-function triggerBass(noteId, time, vol) {
+function triggerBass(noteId, time, vol, duration) {
   const freq    = NOTE_FREQ[noteId] || 41.2;
   const variant = instVariant.bass;
 
@@ -399,9 +402,10 @@ function triggerBass(noteId, time, vol) {
 
     g.gain.linearRampToValueAtTime(vol, time + 0.01);
     g.gain.setValueAtTime(vol, time + 0.1);
-    g.gain.exponentialRampToValueAtTime(0.001, time + 0.6);
+    g.gain.exponentialRampToValueAtTime(0.001, time + Math.max(duration || 0.6, 0.1));
     osc1.start(time); osc2.start(time);
-    osc1.stop(time + 0.65); osc2.stop(time + 0.65);
+    osc1.stop(time + Math.max(duration || 0.6, 0.1) + 0.05);
+    osc2.stop(time + Math.max(duration || 0.6, 0.1) + 0.05);
   }
 
   else { // synth bass
@@ -418,8 +422,8 @@ function triggerBass(noteId, time, vol) {
     osc.connect(filt); filt.connect(g);
 
     g.gain.linearRampToValueAtTime(vol * 0.9, time + 0.008);
-    g.gain.exponentialRampToValueAtTime(0.001, time + 0.5);
-    osc.start(time); osc.stop(time + 0.55);
+    g.gain.exponentialRampToValueAtTime(0.001, time + Math.max(duration || 0.5, 0.1));
+    osc.start(time); osc.stop(time + Math.max(duration || 0.5, 0.1) + 0.05);
   }
 }
 
