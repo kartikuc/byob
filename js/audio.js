@@ -2,7 +2,7 @@
    BYOB — Be Your Own Band  |  js/audio.js
    Web Audio engine: init, synthesis per instrument,
    step scheduler, and canvas visualizer.
-   Depends on: state.js (loaded before this file)
+   
    ══════════════════════════════════════════════════ */
 
 'use strict';
