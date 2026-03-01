@@ -1,26 +1,20 @@
 /* ══════════════════════════════════════════════════
    BYOB — Be Your Own Band  |  js/state.js
-   Shared state: grid, instrument definitions, note map.
-   Loaded first; audio.js and ui.js read from this.
+   Grid model:
+     grid[inst][rowId][step] = 0 (off) | N (note spans N slots)
    ══════════════════════════════════════════════════ */
-
 'use strict';
 
-// ── Playback state ──────────────────────────────────
 let stepCount = 32;
 let bpm       = 120;
 let swing     = 0;
 
-// ── Per-instrument state ────────────────────────────
 const instVolumes = { drums: 0.85, keys: 0.70, guitar: 0.70, bass: 0.80 };
 const instMuted   = { drums: false, keys: false, guitar: false, bass: false };
 const instVariant = { drums: 'acoustic', keys: 'piano', guitar: 'acoustic', bass: 'electric' };
 
-// ── Sequencer grid ──────────────────────────────────
-// grid[inst][rowId] = Boolean[]  (length === stepCount)
 const grid = {};
 
-// ── Instrument definitions ──────────────────────────
 const instruments = {
   drums: {
     color: 'var(--drums-color)',
@@ -70,37 +64,27 @@ const instruments = {
   },
 };
 
-// ── Note → frequency map (Hz) ───────────────────────
 const NOTE_FREQ = {
-  C1: 32.7,  D1: 36.7,  E1: 41.2,  F1: 43.7,  G1: 49,    A1: 55,    B1: 61.7,
-  C2: 65.4,  D2: 73.4,  E2: 82.4,  F2: 87.3,  G2: 98,    A2: 110,   B2: 123.5,
-  C3: 130.8, D3: 146.8, E3: 164.8, F3: 174.6, G3: 196,   A3: 220,   B3: 246.9,
-  C4: 261.6, D4: 293.7, E4: 329.6, F4: 349.2, G4: 392,   A4: 440,   B4: 493.9,
-  C5: 523.3, D5: 587.3, E5: 659.3, F5: 698.5, G5: 784,   A5: 880,   B5: 987.8,
-  E4g: 329.6, // guitar high-E alias
+  C1:32.7, D1:36.7, E1:41.2, F1:43.7, G1:49,   A1:55,   B1:61.7,
+  C2:65.4, D2:73.4, E2:82.4, F2:87.3, G2:98,   A2:110,  B2:123.5,
+  C3:130.8,D3:146.8,E3:164.8,F3:174.6,G3:196,  A3:220,  B3:246.9,
+  C4:261.6,D4:293.7,E4:329.6,F4:349.2,G4:392,  A4:440,  B4:493.9,
+  C5:523.3,D5:587.3,E5:659.3,F5:698.5,G5:784,  A5:880,  B5:987.8,
+  E4g:329.6,
 };
 
-// ── Grid helpers ────────────────────────────────────
-
-/** Populate grid with empty arrays for every instrument row. */
 function initGrid() {
   for (const [inst, def] of Object.entries(instruments)) {
     grid[inst] = {};
-    for (const row of def.rows) {
-      grid[inst][row.id] = new Array(stepCount).fill(false);
-    }
+    for (const row of def.rows) grid[inst][row.id] = new Array(stepCount).fill(0);
   }
 }
 
-/**
- * Resize all rows to newCount, preserving existing beats.
- * Updates the module-level stepCount variable.
- */
 function resizeGrid(newCount) {
   for (const [inst, def] of Object.entries(instruments)) {
     for (const row of def.rows) {
       const old = grid[inst][row.id];
-      const next = new Array(newCount).fill(false);
+      const next = new Array(newCount).fill(0);
       for (let i = 0; i < Math.min(old.length, newCount); i++) next[i] = old[i];
       grid[inst][row.id] = next;
     }
@@ -108,26 +92,22 @@ function resizeGrid(newCount) {
   stepCount = newCount;
 }
 
-/** Clear all beats across every instrument. */
 function clearGrid() {
-  for (const inst of Object.keys(grid)) {
-    for (const rowId of Object.keys(grid[inst])) {
-      grid[inst][rowId].fill(false);
-    }
-  }
+  for (const inst of Object.keys(grid))
+    for (const rowId of Object.keys(grid[inst]))
+      grid[inst][rowId].fill(0);
 }
 
-/** Load a simple starter groove so first play sounds good. */
+function clearInstGrid(inst) {
+  for (const rowId of Object.keys(grid[inst]))
+    grid[inst][rowId].fill(0);
+}
+
 function loadDefaultPattern() {
   const s = (inst, row, steps) =>
-    steps.forEach(i => { if (i < stepCount) grid[inst][row][i] = true; });
-
-  // Kick on beats 1 & 3
-  s('drums', 'kick',    [0, 8, 16, 24]);
-  // Snare on beats 2 & 4
-  s('drums', 'snare',   [4, 12, 20, 28]);
-  // Closed hi-hat on every 8th note
-  s('drums', 'hihat',   [0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30]);
-  // Bass root
-  s('bass',  'E1',      [0, 10, 16, 26]);
+    steps.forEach(i => { if (i < stepCount) grid[inst][row][i] = 1; });
+  s('drums','kick',  [0,8,16,24]);
+  s('drums','snare', [4,12,20,28]);
+  s('drums','hihat', [0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30]);
+  s('bass', 'E1',    [0,10,16,26]);
 }
