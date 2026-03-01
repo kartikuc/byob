@@ -71,6 +71,7 @@
           <input type="range" min="0" max="1" step="0.01" value="0.85" data-inst="drums" class="inst-vol-slider">
         </div>
         <button class="inst-mute" data-inst="drums">Mute</button>
+        <button class="inst-clear btn-inst-clear" data-inst="drums">Clear</button>
         <button class="collapse-btn" data-panel="panel-drums">▾</button>
       </div>
       <div class="seq-body" id="seq-drums"></div>
@@ -91,6 +92,7 @@
           <input type="range" min="0" max="1" step="0.01" value="0.7" data-inst="keys" class="inst-vol-slider">
         </div>
         <button class="inst-mute" data-inst="keys">Mute</button>
+        <button class="inst-clear btn-inst-clear" data-inst="keys">Clear</button>
         <button class="collapse-btn" data-panel="panel-keys">▾</button>
       </div>
       <div class="seq-body" id="seq-keys"></div>
@@ -110,6 +112,7 @@
           <input type="range" min="0" max="1" step="0.01" value="0.7" data-inst="guitar" class="inst-vol-slider">
         </div>
         <button class="inst-mute" data-inst="guitar">Mute</button>
+        <button class="inst-clear btn-inst-clear" data-inst="guitar">Clear</button>
         <button class="collapse-btn" data-panel="panel-guitar">▾</button>
       </div>
       <div class="seq-body" id="seq-guitar"></div>
@@ -129,9 +132,20 @@
           <input type="range" min="0" max="1" step="0.01" value="0.8" data-inst="bass" class="inst-vol-slider">
         </div>
         <button class="inst-mute" data-inst="bass">Mute</button>
+        <button class="inst-clear btn-inst-clear" data-inst="bass">Clear</button>
         <button class="collapse-btn" data-panel="panel-bass">▾</button>
       </div>
       <div class="seq-body" id="seq-bass"></div>
+    </div>
+
+    <!-- Shortcut strip -->
+    <div class="shortcut-strip">
+      <kbd>Shift</kbd>+hover fill &nbsp;·&nbsp;
+      <kbd>Ctrl</kbd>+drag select &nbsp;·&nbsp;
+      <kbd>Ctrl+C</kbd> copy &nbsp;·&nbsp;
+      <kbd>Ctrl+V</kbd> paste &nbsp;·&nbsp;
+      <kbd>⌫</kbd> delete &nbsp;·&nbsp;
+      drag right edge to stretch note
     </div>
 
     <!-- Visualizers -->
